@@ -79,6 +79,46 @@
 <footer>
     <p>© 2026 Oluwaseun Folaranmi | AI Project</p>
 </footer>
+<!-- CHATBOT -->
+<div id="chatbot">
+  <div id="chat-header">💬 AI Assistant</div>
 
+  <div id="chat-box"></div>
+
+  <div id="chat-input">
+    <input type="text" id="user-input" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+async function sendMessage() {
+  const input = document.getElementById("user-input");
+  const message = input.value;
+  if (!message) return;
+
+  const chatBox = document.getElementById("chat-box");
+
+  // Show user message
+  chatBox.innerHTML += `<div class="user">${message}</div>`;
+  input.value = "";
+
+  // Call your backend API
+  const response = await fetch("https://ai-whatsapp-assistant.onrender.com/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ message: message })
+  });
+
+  const data = await response.json();
+
+  // Show AI reply
+  chatBox.innerHTML += `<div class="bot">${data.reply}</div>`;
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+</script>
 </body>
 </html>
